@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  body{
+    width:1060px;
+    margin:50px auto;
+  }
+  path {  stroke: #fff; }
+  path:hover {  opacity:0.9; }
+  rect:hover {  fill:blue; }
+  .axis {  font: 10px sans-serif; }
+  .legend tr{    border-bottom:1px solid grey; }
+  .legend tr:first-child{    border-top:1px solid grey; }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .x.axis path {  display: none; }
+  .legend{
+    margin-bottom:76px;
+    display:inline-block;
+    border-collapse: collapse;
+    border-spacing: 0px;
+  }
+  .legend td{
+    padding:4px 5px;
+    vertical-align:bottom;
+  }
+  .legendFreq, .legendPerc{
+    align:right;
+    width:50px;
+  }
+</style>
+<body>
+<div id='dashboard'>
+</div>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="js/vis.js">
+</script>
+<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
+<script>
+var firebaseConfig = {
+    apiKey: "AIzaSyA0yFTldWHT4m4wlIjQ_v0vjLgBj9Qz5ws",
+    authDomain: "web-group-proj.firebaseapp.com",
+    databaseURL: "https://web-group-proj.firebaseio.com",
+    projectId: "web-group-proj",
+    storageBucket: "web-group-proj.appspot.com",
+    messagingSenderId: "311652546748",
+    appId: "1:311652546748:web:df6bcdeaf7af3880d2b8b9",
+    measurementId: "G-19DBCPHFYH"
+  };
+  // Initialize Firebase
+  var app=firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  var db = firebase.firestore(app);
+</script>
+<script src="js/draw.js" type="text/javascript"></script>
+<script>
+var queryRef=firebase.database().ref('USvideos');
+var value = document.getElementById("value");
+var dbRef = firebase.database().ref("USvideos").orderByChild("video_id").limitToFirst(100);
+queryRef.on('value',showdatafun);
+</script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="js/processdata.js"></script>
+     <script src="https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/word.js"></script>
+    <style>
+    table, th, td {
+    border: 0.5px solid;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+}
+
+table {
+    border-spacing: 3px;
+}
+</style>
+<body>
+    <table id="table" border="1">
+        <caption>dataset</caption>
+        <thead>
+            <tr>
+                <th>video_id</th>
+                <th>trending_date</th>
+                <th>title</th>
+                <th>channel_title</th>
+                <th>category_id</th>
+                <th>publish_time</th>
+                <th>views</th>
+                <th>likes</th>
+                <th>dislikes</th>
+                <th>comment_count</th>
+                <th>thumbnail_link</th>
+                <th>comments_disabled</th>
+                <th>ratings_disabled</th>
+                <th>video_error_or_removed</th>
+                <th>tags</th>
+                <th>description</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td></td><td></td><td><div align="center"><input type="button" value="Sort ascending" onclick="titlesortAscending()"/>  <br/><br/>   <input type="button" value="Sort descending" onclick="titlesortDescending()"/></div></td><td></td><td><div id='cat'></div></td>
+              <td> <div align="center"> <input type="button" value="Sort Ascending" onclick="timesortAscending()"/>   <br/><br/>   <input type="button" value="Sort Descending" onclick="timesortDescending()"/> </div> </td>
+              <td><div id='view' align="center"><input type="button" value="Sort ascending" onclick="viewsortAscending()"/> <br/><br/> <input type="button" value="view Sort descending" onclick="viewsortDescending()"/>   </div></td>
+              <td>  <div align="center">  Filter contains:   <input type="text" id="left" > to <input type="text" id="right" > <br/><br/> <input type="button" value="submit" onclick="filterLikes()"/> </div> <br/><br/> <div align="center">  <input type="button" value="Sort ascending" onclick="likessortAscending()"/>  <br/><br/> <input type="button" value="Sort descending" onclick="likessortDescending()"/> </div></td><td></td>
+              <td></td><td></td><td></td><td></td><td></td>
+              <td><div align="center">  Filter contains:   <input type="text" id="tag" >   <input type="button" value="submit" onclick="filterTag()"/> </div>   <br/><br/>     <div id="canvas-container" align="center"><canvas id="canvas" width="500px" height="300px"></canvas><script>queryRef.on('value', showwordcloud);</script></div>
+</td><td></td>
+          </tr>
+        </tbody>
+    </table>
+    <script>
+    dbRef.on('value',showdatatab);
+    </script>
+  
